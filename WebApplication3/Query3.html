@@ -1,0 +1,264 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Leaflet example in one file</title>
+
+    <!-- include leaflet css and javascript -->
+    <link rel="stylesheet" crossorigin=""
+          href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet-src.js"
+            crossorigin=""></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js"></script>
+
+    <style type="text/css">
+        #map {
+            height: 300px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="map"></div>
+    <div id="coordinate"></div>
+    <canvas id="chartHours"></canvas>
+
+    <script>
+
+        $(document).ready(function () {
+
+            var options = {
+                center: [39.10418, -77.62987],
+                zoom: 15
+            }
+
+            var map = L.map('map', options);
+
+            L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', { attribution: 'OSM' })
+                .addTo(map);
+
+            // map.on('click',
+            // 	function(e){
+            // 		//var coord = e.latlng.toString().split(',');
+            // 		//var lat = coord[0].split('(');
+            // 		//var lng = coord[1].split(')');
+            // 		//alert("You clicked the map at LAT: " + lat[1] + " and LONG: " + lng[0]);
+            // 		L.marker(e.latlng).addTo(map);
+            // 	});
+
+            var myMarker = L.marker([39.10418, -77.6287], { title: "MyPoint", alt: "The Big I", draggable: true })
+                .addTo(map)
+                .on('dragend', function () {
+                    var coord = String(myMarker.getLatLng()).split(',');
+                    console.log(coord);
+                    $('#coordinate').html("<h2>Coordinate:" + coord + "</h2>");
+                    var lat = coord[0].split('(');
+                    console.log(lat);
+                    var lng = coord[1].split(')');
+                    console.log(lng);
+                    myMarker.bindPopup("Moved to: " + lat[1] + ", " + lng[0] + ".");
+                    /*
+                    var position = {};
+
+                    position.lon = lng[0];
+                    position.lat = lat[1];
+                    position.kms = 50;
+                    */
+                    var lon = lng[0];
+                    var lat = lat[1];
+                    var kms = 20;
+                    
+                    $.ajax({
+                        
+
+                        url: "WebService1.asmx/Querypart",
+                        method: 'post',
+                        dataType: "json",
+                        data: { "lon": lon,"lat": lat, "kms":kms },
+                        success: function (result) {
+
+                            console.log("success");
+
+
+                            var data1 = [];
+                            var data2 = [];
+                            var data3 = [];
+                            var data4 = [];
+                            var data5 = [];
+                            var data6 = [];
+                           
+
+                            var labels = [];
+                            // var borderColor = [];
+                            var backgroundColor = [];
+                            // var red, green, blue;
+
+                            const ctx = document.getElementById('chartHours').getContext('2d');
+
+                            if (result) {
+
+                                for (var i = 0; i < result.length; i++) {
+                                    if (result[i]) {
+
+
+
+                                        data1[i] = result[i].noofaccidents;
+                                        data2[i] = result[i].noofaccidentsnorth;
+                                        data3[i] = result[i].noofaccidentssouth;
+                                        data4[i] = result[i].noofaccidentseast;
+                                        data5[i] = result[i].noofaccidentswest;
+                                        
+                                        labels[i] = result[i].year;
+                                    }
+                                    // red = Math.floor((Math.random() * 255) + 1);
+                                    // green = Math.floor((Math.random() * 255) + 1);
+                                    // blue = Math.floor((Math.random() * 255) + 1);
+
+
+                                    // backgroundColor[i] = 'rgba(' + red + ',' + green + ','
+                                    //     + blue + ', 0.2)';
+                                    // borderColor[i] = 'rgba(' + red + ',' + green + ',' + blue
+                                    //     + ', 0.2)';
+                                }
+                            }
+                            const myChart = new Chart(ctx, {
+                                type: 'line',
+                                data: {
+                                    labels: labels,
+                                    datasets: [{
+                                        label: 'Number of Accidents',
+                                        data: data1,
+
+                                        borderColor: "#3e95cd",
+                                        fill: false
+                                    },
+                                    {
+                                        label: 'Number of Accidents - North',
+                                        data: data2,
+                                        borderColor: "#8e5ea2",
+                                        fill: false
+                                    },
+                                    {
+                                        label: 'Number of Accidents - South',
+                                        data: data3,
+                                        borderColor: "#3cba9f",
+                                        fill: false
+                                    },
+                                    {
+                                        label: 'Number of Accidents - East',
+                                        data: data4,
+                                        borderColor: "#e8c3b9",
+                                        fill: false
+                                    },
+                                    {
+                                        label: 'Number of Accidents - West',
+                                        data: data5,
+                                        borderColor: "#3e95cd",
+                                        fill: false
+                                    }
+                                    ]
+                                },
+                                options: {
+                                    scales: {
+                                        y: {
+                                            beginAtZero: true
+                                        }
+                                    }
+                                }
+                            });
+
+
+
+                        },
+                        error: function (xhr, err) {
+                            console.log("fail");
+                        }
+                    });
+                    
+                    /*
+
+                    $.ajax({
+                        url: "WebService1.asmx/Querypart",
+                        method: "post",
+                        dataType: "json",
+                        data: "{cmp: " + JSON.stringify(position) + "}",
+                        contentType: "application/json; charset=utf-8",
+
+
+                        success: function (result) {
+
+                            console.log(success);
+
+
+                        },
+                        error: function (xhr, err) {
+                            console.log(xhr.responseText);
+
+                            var data = [];
+
+
+                            var labels = [];
+
+
+                            const ctx = document.getElementById('chartHours').getContext('2d');
+
+                            result = xhr.responseText[0];
+
+                            if (result) {
+
+                                for (var i = 0; i < result.length; i++) {
+                                    if (result[i]) {
+
+
+
+                                        data[i] = result[i].noofaccidents;
+
+                                        labels[i] = result[i].year;
+                                    }
+                                    // red = Math.floor((Math.random() * 255) + 1);
+                                    // green = Math.floor((Math.random() * 255) + 1);
+                                    // blue = Math.floor((Math.random() * 255) + 1);
+
+
+                                    // backgroundColor[i] = 'rgba(' + red + ',' + green + ','
+                                    //     + blue + ', 0.2)';
+                                    // borderColor[i] = 'rgba(' + red + ',' + green + ',' + blue
+                                    //     + ', 0.2)';
+                                }
+                            }
+                            const myChart = new Chart(ctx, {
+                                type: 'line',
+                                data: {
+                                    labels: labels,
+                                    datasets: [{
+                                        label: 'Number of accidents',
+                                        data: data,
+
+                                        borderColor: "#3e95cd",
+                                        fill: false
+                                    }
+
+                                    ]
+                                },
+                                options: {
+                                    scales: {
+                                        y: {
+                                            beginAtZero: true
+                                        }
+                                    }
+                                }
+                            });
+
+                        }
+                    });
+                    */
+
+
+                });
+        });
+
+    </script>
+</body>
+</html>

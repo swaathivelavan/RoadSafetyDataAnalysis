@@ -1,0 +1,468 @@
+﻿<!DOCTYPE html>
+
+
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+
+    <title>Thunderbolt</title>
+
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js"></script>
+
+    <script src="home.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous" />
+
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+
+
+    <link href="https://fonts.googleapis.com/css?family=Amatic+SC:700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+
+    <style>
+
+        .wedotext {
+            color: black;
+        }
+
+            .wedotext.change {
+                color: white !important;
+            }
+
+        .black-text.change {
+            color: white !important;
+        }
+
+        #wedo {
+            position: relative;
+            top: 55% !important;
+            color: black;
+        }
+
+        .brand-logo {
+            font-family: 'Amatic SC', sans-serif;
+        }
+
+        nav {
+            padding-left: 32px;
+            padding-right: 32px;
+        }
+
+        a,
+        h5,
+        h6,
+        h4,
+        body {
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .products .products > .carousel-item {
+            width: 240px !important;
+        }
+
+        .products {
+            margin-top: -86px;
+            margin-bottom: -80px;
+        }
+
+        .stages {
+            box-shadow: 0px 0px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12), 0 3px 5px -1px rgba(0, 0, 0, 0.3);
+        }
+
+        .material-icons {
+            vertical-align: middle;
+        }
+
+        .stages-container {
+            padding-left: 24px !important;
+            padding-right: 24px !important;
+        }
+
+        textarea {
+            height: 124px !important;
+            resize: none !important;
+            line-height: 2.4;
+            /* Remove this if you want the user to resize the textarea */
+        }
+
+        .collapsible {
+            margin: 24px;
+            height: 200px;
+            overflow: auto;
+        }
+
+        .collapsible-body {
+            padding: 12px;
+        }
+
+        .card {
+            border-radius: 4px;
+        }
+
+        .materialboxed {
+            border-top-left-radius: 4px !important;
+            border-top-right-radius: 4px !important;
+        }
+
+        .menua, .menub, .menuc {
+            width: 35px;
+            height: 5px;
+            background-color: white;
+            margin: 6px 0;
+            transition: 0.4s;
+        }
+
+        .menucontainer {
+            position: absolute;
+            left: 0.5%;
+            top: 2%;
+            cursor: pointer;
+        }
+
+        .change .menua {
+            -webkit-transform: rotate(-45deg) translate(-9px, 6px);
+            transform: rotate(-45deg) translate(-9px, 6px);
+        }
+
+        .change .menub {
+            opacity: 0;
+        }
+
+        .change .menuc {
+            -webkit-transform: rotate(45deg) translate(-8px, -8px);
+            transform: rotate(45deg) translate(-8px, -8px);
+        }
+
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            background: #042331;
+            height: 100%;
+            visibility: hidden;
+            top: 0;
+            width: 100%;
+        }
+
+            .sidebar.change {
+                visibility: visible;
+                zindex: 1002;
+            }
+
+            .sidebar header {
+                font-size: 22px;
+                color: white;
+                text-align: center;
+                line-height: 70px;
+                background: #063146;
+                user-select: none;
+                visibility: visible;
+            }
+
+            .sidebar ul a {
+                display: block;
+                width: 100%;
+                line-height: 65px;
+                font-size: 20px;
+                color: white;
+                padding-left: 40px;
+                box-sizing: border-box;
+                border-top: 1px solid rgba(255,255,255,.1);
+                border-bottom: 1px solid white;
+                transition: .4s;
+                text-decoration: none;
+            }
+
+        ul li:hover a {
+            padding-left: 50px;
+        }
+
+
+        .sidebar ul li i {
+            margin-right: 16px;
+        }
+
+        .change .menua {
+            -webkit-transform: rotate(-45deg) translate(-9px, 6px);
+            transform: rotate(-45deg) translate(-9px, 6px);
+        }
+
+        .change .menub {
+            opacity: 0;
+        }
+
+        .change .menuc {
+            -webkit-transform: rotate(45deg) translate(-8px, -8px);
+            transform: rotate(45deg) translate(-8px, -8px);
+        }
+
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            width: 100%;
+            background: #042331;
+            height: 100%;
+            visibility: hidden;
+        }
+
+            .sidebar.change {
+                visibility: visible;
+                zindex: 1002;
+            }
+    </style>
+
+</head>
+
+<body>
+
+    <!--Side Navigation bar-->
+    <div class="sidebar">
+        <header>
+            <div class="menucontainer" id="menu">
+                <div class="menua"></div>
+                <div class="menub"></div>
+                <div class="menuc"></div>
+            </div>
+            &nbsp &nbsp Dashboard Creator
+        </header>
+
+        <ul>
+            <li><a href="one.html" id="graph"><i class="fa fa-bar-chart"></i> Graph </a></li>
+            <li><a href="#" id="card"><i class='fa fa-window-maximize' aria-hidden='true'></i>Cards</a></li>
+
+            <li><a href="#" id="matrix"><i class='fa fa-matrix-org' aria-hidden='true'></i>Matrix</a></li>
+            <li><a href="#" id="listing"><i class='fa fa-list-alt' aria-hidden='true'></i>Listing</a></li>
+
+        </ul>
+
+    </div>
+
+    <div id="container">
+
+        <table id="table"><thead><tr><th>Agency</th><th>Subagency</th></tr><tbody></tbody></table>
+    </div>
+
+
+    <!--Bottom Carousel of what we do and heading -->
+
+    <div id="wedo">
+        <center>
+            <h5 class="wedotext" style="top:50%; margin:24px;">Things we can do...</h5>
+        </center>
+
+        <div class="carousel products">
+            <a class="carousel-item" href="#two!">
+                <img src="car.jpeg">
+                <center class="black-text">Car Study</center>
+            </a>
+            <a class="carousel-item" href="#three!">
+                <img src="legal.jpeg">
+                <center class="black-text">Legal/Traffic Information</center>
+            </a>
+            <a class="carousel-item" href="#four!">
+                <img src="insurance.jpeg">
+                <center class="black-text">Insurance</center>
+            </a>
+            <a class="carousel-item" href="#five!">
+                <img src="crash.jpeg">
+                <center class="black-text">Safety-Crash rating</center>
+            </a>
+            <a class="carousel-item" href="#one!">
+                <img src="dashboard.jpeg">
+                <center class="black-text">In-depth analysis</center>
+            </a>
+        </div>
+
+        <br>
+
+
+
+    </div>
+
+
+
+
+
+
+</body>
+
+
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+
+<script>
+
+
+    $(".button-collapse").sideNav();
+
+    var currentStage = 1;
+    var noOfStages = 6;
+
+    var chosenProducts = [];
+
+    var dots = document.getElementsByClassName("dot");
+
+    $(document).ready(function () {
+
+
+
+        $('.parallax').parallax();
+        $('.products').carousel();
+        $('.modal').modal();
+        $('.materialboxed').materialbox();
+
+        var carousel = $('.stages').carousel({ fullWidth: true, noWrap: true, duration: 50 });
+        //Disable all swipping on carousel
+        if (typeof window.ontouchstart !== 'undefined') {
+            carousel.off('touchstart.carousel');
+        }
+        carousel.off('mousedown.carousel');
+
+        carousel = $('.products').carousel();
+        //Disable all swipping on carousel
+        if (typeof window.ontouchstart !== 'undefined') {
+            carousel.off('touchstart.carousel');
+        }
+        carousel.off('mousedown.carousel');
+
+        $('.collapsible').collapsible({
+            onOpen: function (el) {
+                el[0].children[0].children[0].children[0].children[0].innerHTML = "check_box";
+                chosenProducts.push(el[0].id);
+            },
+            onClose: function (el) {
+                el[0].children[0].children[0].children[0].children[0].innerHTML = "check_box_outline_blank";
+                chosenProducts.pop(el[0].id);
+            }
+        });
+
+        repeat();
+    });
+
+    function repeat() {
+        setTimeout(() => { $('.products').carousel('next'); repeat(); }, 1500)
+    }
+
+  
+
+ 
+   
+
+    function submit() {
+        console.log('submit');
+
+        var ideas = $('#ideas').val().trim();
+
+        if (!ideas) {
+            Materialize.toast('You haven\'t shared your ideas yet...', 2000, 'rounded');
+            $('.stages').carousel('set', 1);
+            document.getElementById('nexttxt').innerHTML = "next";
+            currentStage = 2;
+            updateDots();
+            $('#ideas').focus();
+            return;
+        }
+
+        if (!(chosenProducts.filter(item => item != 'li-deadline' && item != 'li-wrap')).length) {
+            Materialize.toast('You haven\'t chose any products yet...', 2000, 'rounded');
+            $('.stages').carousel('set', 2);
+            document.getElementById('nexttxt').innerHTML = "next";
+            currentStage = 3;
+            updateDots();
+            return;
+        }
+
+        var first_name = $("#first_name").val().trim();
+        var contact = $("#contact").val().trim();
+
+        if (!(first_name && contact)) {
+            Materialize.toast('You haven\'t provided sufficient contact information...', 2000, 'rounded');
+            $('.stages').carousel('set', 4);
+            document.getElementById('nexttxt').innerHTML = "next";
+            currentStage = 5;
+            updateDots();
+            return;
+        }
+
+        var finalObject = {
+            name: first_name,
+            contact: contact,
+            ideas: $("#ideas").val(),
+            contact_medium: ($("#email").is(":checked") ? "email" : ($("#call").is(":checked") ? "call" : "whatsapp")),
+            orders: chosenProducts,
+            parameters: {
+                poster: $("#poster").val(),
+                poster_qty: $("#posterq").val(),
+                framed: $("#framed").val(),
+                greeting: $("#greeting").val(),
+                greeting_color: $("#greetingc").val(),
+                greeting_qty: $("#greetingq").val(),
+                calendar: $("#calendar").val(),
+                tee: $("#tee").val(),
+                mug: $("#mug").val(),
+                case: $("#case").val(),
+                custom: $("#custom").val(),
+                deadline: $("#date").val(),
+            }
+        };
+
+        console.log(finalObject);
+
+        $("#ok_btn").attr("disabled", "disabled");
+        $("#modal_title").html("Confirming order");
+        $("#progress_bar").css("width", "0%");
+        $('#modal1').modal('open');
+
+        firebase.database().ref("orders/").push(finalObject).then(
+
+            e => {
+
+                var file = document.querySelector('input[type=file]').files[0];
+
+                if (file) {
+
+                    $("#modal_title").html("Uploading image");
+
+                    firebase.storage().ref("images/" + e.key).put(file).on('state_changed',
+                        snapshot => $("#progress_bar").css("width", ((snapshot.bytesTransferred / snapshot.totalBytes) * 100) + "%"),
+                        err => {
+                            $("#modal_title").html("Oops, something went wrong, try again")
+                            $("#ok_btn").removeAttr("disabled");
+                        },
+                        function () {
+                            $("#modal_title").html("Order confirmed!");
+                            $("#ok_btn").removeAttr("disabled");
+                        });
+
+                } else {
+                    $("#modal_title").html("Order confirmed!");
+                    $("#progress_bar").css("width", "100%");
+                    $("#ok_btn").removeAttr("disabled");
+                }
+
+            }
+
+        ).catch(err => {
+            $("#modal_title").html("Oops, something went wrong, try again");
+            $("#ok_btn").removeAttr("disabled");
+        });
+
+
+      
+
+    }
+
+</script>
+
+</html>

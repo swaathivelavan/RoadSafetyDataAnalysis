@@ -1,0 +1,276 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js"></script>
+
+    <script src="graph.js"></script>
+    <script src="home.js"></script>
+
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
+      
+
+    <style>
+        .selectize-dropdown {
+            min-width: 300px !important;
+        }
+        #myChart {
+            position: relative;
+            height: 45%;
+            width: 45%;
+        }
+
+        .menua, .menub, .menuc {
+            width: 35px;
+            height: 5px;
+            background-color: white;
+            margin: 6px 0;
+            transition: 0.4s;
+        }
+
+        .menucontainer {
+            position: absolute;
+            left: 0.5%;
+            top: 2%;
+            cursor: pointer;
+        }
+
+        .change .menua {
+            -webkit-transform: rotate(-45deg) translate(-9px, 6px);
+            transform: rotate(-45deg) translate(-9px, 6px);
+        }
+
+        .change .menub {
+            opacity: 0;
+        }
+
+        .change .menuc {
+            -webkit-transform: rotate(45deg) translate(-8px, -8px);
+            transform: rotate(45deg) translate(-8px, -8px);
+        }
+
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            background: #042331;
+            height: 100%;
+            visibility: hidden;
+            top: 0;
+            width: 100%;
+        }
+
+            .sidebar.change {
+                visibility: visible;
+                zindex: 1002;
+            }
+
+            .sidebar header {
+                font-size: 22px;
+                color: white;
+                text-align: center;
+                line-height: 70px;
+                background: #063146;
+                user-select: none;
+                visibility: visible;
+            }
+
+            .sidebar ul a {
+                display: block;
+                width: 100%;
+                line-height: 65px;
+                font-size: 20px;
+                color: white;
+                padding-left: 40px;
+                box-sizing: border-box;
+                border-top: 1px solid rgba(255,255,255,.1);
+                border-bottom: 1px solid white;
+                transition: .4s;
+                text-decoration: none;
+            }
+
+        ul li:hover a {
+            padding-left: 50px;
+        }
+
+
+        .sidebar ul li i {
+            margin-right: 16px;
+        }
+
+        .change .menua {
+            -webkit-transform: rotate(-45deg) translate(-9px, 6px);
+            transform: rotate(-45deg) translate(-9px, 6px);
+        }
+
+        .change .menub {
+            opacity: 0;
+        }
+
+        .change .menuc {
+            -webkit-transform: rotate(45deg) translate(-8px, -8px);
+            transform: rotate(45deg) translate(-8px, -8px);
+        }
+
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            width: 100%;
+            background: #042331;
+            height: 100%;
+            visibility: hidden;
+        }
+
+            .sidebar.change {
+                visibility: visible;
+                zindex: 1002;
+            }
+
+        .flex {
+            display: flex;
+            margin-top: 5%;
+        }
+
+        .input-container {
+            display: -ms-flexbox; /* IE10 */
+            display: flex;
+            width: 100%;
+            padding: 10px;
+            outline: none;
+            margin-bottom: 15px;
+        }
+
+        .icon {
+            padding: 10px;
+            background: dodgerblue;
+            color: white;
+            min-width: 50px;
+            text-align: center;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 10px;
+            outline: none;
+        }
+
+        select {
+            width: 300px;
+            padding: 10px;
+        }
+
+        .ui-dialog-titlebar {
+            display: none;
+        }
+
+
+        .input-field:focus {
+            border: 2px solid dodgerblue;
+        }
+
+        /* Set a style for the submit button */
+        .btn {
+            background-color: dodgerblue;
+            color: white;
+            padding: 15px 20px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            opacity: 0.9;
+        }
+
+            .btn:hover {
+                opacity: 1;
+            }
+    </style>
+
+</head>
+<body>
+
+    <!--Navigation bar-->
+
+       <div class="sidebar">
+           <header>
+               <div class="menucontainer" id="menu">
+                   <div class="menua"></div>
+                   <div class="menub"></div>
+                   <div class="menuc"></div>
+               </div>
+               &nbsp &nbsp Dashboard Creator
+           </header>
+
+           <ul>
+               <li><a href="one.html" id="graph"><i class="fa fa-bar-chart"></i> Graph </a></li>
+               <li><a href="#" id="card"><i class='fa fa-window-maximize' aria-hidden='true'></i>Cards</a></li>
+
+               <li><a href="#" id="matrix"><i class='fa fa-matrix-org' aria-hidden='true'></i>Matrix</a></li>
+               <li><a href="#" id="listing"><i class='fa fa-list-alt' aria-hidden='true'></i>Listing</a></li>
+
+           </ul>
+
+       </div>
+
+
+
+       <div class="flex">
+
+           <div class="container" id="container1"><canvas id="myChart" width="500" height="500"></canvas></div>
+           <div class="container"></div>
+           <div class="container"></div>
+
+       </div>
+
+
+    <div id="form-element-summary" class="summary">
+        <form id="myform" action="" method="post" style="margin:auto">
+
+            <div class="input-container">
+                <i class="fa fa-font icon" aria-hidden="true"></i>
+                <select id="vehicletype"><option value='-1' disabled>Select vehicle type</option></select>
+            </div>
+
+
+
+            <div class="input-container">
+                <i class="fa fa-font icon" aria-hidden="true"></i>
+                <select id="color"><option value='-1' disabled>Select color</option></select>
+            </div>
+
+
+            <div class="input-container">
+                <i class="fa fa-font icon" aria-hidden="true"></i>
+                <select id="model"><option value='-1' disabled>Select model</option></select>
+            </div>
+
+            <div class="input-container">
+                <i class="fa fa-font icon" aria-hidden="true"></i>
+                <select id="make"><option value='-1' disabled>Select make</option></select>
+            </div>
+
+            <div class="input-container">
+                <i class="fa fa-font icon" aria-hidden="true"></i>
+                <select id="year"><option value='-1' disabled>Select year</option></select>
+            </div>
+
+            <div class="input-container">
+                <i class="fa fa-font icon" aria-hidden="true">aaaaaa</i>
+                <select id="hazmat"><option value='-1' disabled>Hazmat</option><option>Yes</option><option>No</option></select>
+            </div>
+
+            <div class="input-container">
+                <i class="fa fa-font icon" aria-hidden="true"></i>
+                <select id="cvehicle"><option value='-1' disabled>Commercial vehicle</option><option>Yes</option><option>No</option></select>
+            </div>
+
+            <input type="button" class="btn" id="GetGraphs" value="Get results!"></input>
+</div>
+   
+
+    
+</body>
+</html>
