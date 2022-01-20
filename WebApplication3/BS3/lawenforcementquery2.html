@@ -1,0 +1,637 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/png" href="assets/img/favicon.ico">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+    <title>Road Safety Analysis System</title>
+
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+    <meta name="viewport" content="width=device-width" />
+
+    <!-- include leaflet css and javascript -->
+    <link rel="stylesheet" crossorigin=""
+          href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet-src.js"
+            crossorigin=""></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js"></script>
+
+    <style type="text/css">
+        #map {
+            height: 300px;
+        }
+    </style>
+
+    <!-- Bootstrap core CSS     -->
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Animation library for notifications   -->
+    <link href="assets/css/animate.min.css" rel="stylesheet" />
+
+    <!--  Light Bootstrap Table core CSS    -->
+    <link href="assets/css/light-bootstrap-dashboard.css?v=1.4.0" rel="stylesheet" />
+
+
+    <!--  CSS for Demo Purpose, don't include it in your project     -->
+    <link href="assets/css/demo.css" rel="stylesheet" />
+
+
+    <!--     Fonts and icons     -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
+    <link href="assets/css/pe-icon-7-stroke.css" rel="stylesheet" />
+
+</head>
+<body>
+
+<div class="wrapper">
+    <div class="sidebar" data-color="purple" data-image="assets/img/sidebar-5.jpg">
+
+    <!--
+
+        Tip 1: you can change the color of the sidebar using: data-color="blue | azure | green | orange | red | purple"
+        Tip 2: you can also add an image using data-image tag
+
+    -->
+
+    	<div class="sidebar-wrapper">
+            <div class="logo">
+                <a href="#" class="simple-text">
+                    Road Safety Analysis 
+                </a>
+            </div>
+
+            <ul class="nav">
+                <li>
+                    <a href="home.html">
+                        <i class="pe-7s-home"></i>
+                        <p>Home</p>
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="lawenforcement.html">
+                        <i class="pe-7s-culture"></i>
+                        <p>Law Enforcement</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="vehiclecustomer.html">
+                        <i class="pe-7s-car"></i>
+                        <p>Vehicle Customer</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="Insurance.html">
+                        <i class="pe-7s-user"></i>
+                        <p>Legal</p>
+                    </a>
+                </li>
+            </ul>
+    	</div>
+    </div>
+
+    <div class="main-panel">
+        <nav class="navbar navbar-default navbar-fixed">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#">Trends that would help Law Making and Law Enforcement Agencies</a>
+                </div>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav navbar-left">
+                        <!-- <li>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-dashboard"></i>
+								<p class="hidden-lg hidden-md">Dashboard</p>
+                            </a>
+                        </li> -->
+    
+                    </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        
+                        <!-- <li class="dropdown">
+                              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <p>
+										Dropdown
+										<b class="caret"></b>
+									</p>
+
+                              </a>
+                              <ul class="dropdown-menu">
+                                <li><a href="#">Action</a></li>
+                                <li><a href="#">Another action</a></li>
+                                <li><a href="#">Something</a></li>
+                                <li><a href="#">Another action</a></li>
+                                <li><a href="#">Something</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#">Separated link</a></li>
+                              </ul>
+                        </li> -->
+                        
+						<li class="separator hidden-lg"></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+
+        <div class="content">
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div class="col">
+                        <div class="card">
+                            <div class="header">
+                                <h4 class="title">Select Coordinates</h4>
+
+                               
+
+                            </div>
+
+                            <div class="content">
+                                <div id="map"></div>
+                                <div id="coordinate"></div>
+
+
+
+                                <script>
+                                  
+                                        $(document).ready(function () {
+
+            var options = {
+                                            center: [39.10418, -77.62987],
+                                        zoom: 15
+            }
+
+                                        var map = L.map('map', options);
+
+                                        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {attribution: 'OSM' })
+                                        .addTo(map);
+
+            // map.on('click',
+            // 	function(e){
+            // 		//var coord = e.latlng.toString().split(',');
+            // 		//var lat = coord[0].split('(');
+            // 		//var lng = coord[1].split(')');
+            // 		//alert("You clicked the map at LAT: " + lat[1] + " and LONG: " + lng[0]);
+            // 		L.marker(e.latlng).addTo(map);
+            // 	});
+
+            var myMarker = L.marker([39.10418, -77.6287], {title: "MyPoint", alt: "The Big I", draggable: true })
+                                        .addTo(map)
+                                        .on('dragend', function () {
+                    var coord = String(myMarker.getLatLng()).split(',');
+                                        console.log(coord);
+                                        $('#coordinate').html("<h2>Coordinate:" + coord + "</h2>");
+                                        var lat = coord[0].split('(');
+                                        console.log(lat);
+                                        var lng = coord[1].split(')');
+                                        console.log(lng);
+                                        myMarker.bindPopup("Moved to: " + lat[1] + ", " + lng[0] + ".");
+                    /*
+                    var position = { };
+
+                                        position.lon = lng[0];
+                                        position.lat = lat[1];
+                                        position.kms = 50;
+                                        */
+                                        var lon = lng[0];
+                                        var lat = lat[1];
+                                        var kms = 20;
+
+                                        $.ajax({
+
+
+                                            url: "WebService1.asmx/Querypart",
+                                        method: 'post',
+                                        dataType: "json",
+                                        data: {"lon": lon,"lat": lat, "kms":kms },
+                                        success: function (result) {
+
+                                            console.log("success");
+
+
+                                        var data1 = [];
+                                        var data2 = [];
+                                        var data3 = [];
+                                        var data4 = [];
+                                        var data5 = [];
+                                        var data6 = [];
+
+
+                                        var labels = [];
+                                        // var borderColor = [];
+                                        var backgroundColor = [];
+                                        // var red, green, blue;
+
+                                        const ctx = document.getElementById('chartHours').getContext('2d');
+
+                                        if (result) {
+
+                                for (var i = 0; i < result.length; i++) {
+                                    if (result[i]) {
+
+
+
+                                            data1[i] = result[i].noofaccidents;
+                                        data2[i] = result[i].noofaccidentsnorth;
+                                        data3[i] = result[i].noofaccidentssouth;
+                                        data4[i] = result[i].noofaccidentseast;
+                                        data5[i] = result[i].noofaccidentswest;
+
+                                        labels[i] = result[i].year;
+                                    }
+                                    // red = Math.floor((Math.random() * 255) + 1);
+                                    // green = Math.floor((Math.random() * 255) + 1);
+                                    // blue = Math.floor((Math.random() * 255) + 1);
+
+
+                                    // backgroundColor[i] = 'rgba(' + red + ',' + green + ','
+                                    //     + blue + ', 0.2)';
+                                    // borderColor[i] = 'rgba(' + red + ',' + green + ',' + blue
+                                    //     + ', 0.2)';
+                                }
+                            }
+                                        const myChart = new Chart(ctx, {
+                                            type: 'line',
+                                        data: {
+                                            labels: labels,
+                                        datasets: [{
+                                            label: 'Number of Accidents',
+                                        data: data1,
+
+                                        borderColor: "#3e95cd",
+                                        fill: false
+                                    },
+                                        {
+                                            label: 'Number of Accidents - North',
+                                        data: data2,
+                                        borderColor: "#8e5ea2",
+                                        fill: false
+                                    },
+                                        {
+                                            label: 'Number of Accidents - South',
+                                        data: data3,
+                                        borderColor: "#3cba9f",
+                                        fill: false
+                                    },
+                                        {
+                                            label: 'Number of Accidents - East',
+                                        data: data4,
+                                        borderColor: "#e8c3b9",
+                                        fill: false
+                                    },
+                                        {
+                                            label: 'Number of Accidents - West',
+                                        data: data5,
+                                        borderColor: "#3e95cd",
+                                        fill: false
+                                    }
+                                        ]
+                                },
+                                        options: {
+                                            scales: {
+                                            y: {
+                                            beginAtZero: true
+                                        }
+                                    }
+                                }
+                            });
+
+
+
+                        },
+                                        error: function (xhr, err) {
+                                            console.log("fail");
+                        }
+                    });
+
+                    /*
+
+                    $.ajax({
+                                            url: "WebService1.asmx/Querypart",
+                                        method: "post",
+                                        dataType: "json",
+                                        data: "{cmp: " + JSON.stringify(position) + "}",
+                                        contentType: "application/json; charset=utf-8",
+
+
+                                        success: function (result) {
+
+                                            console.log(success);
+
+
+                        },
+                                        error: function (xhr, err) {
+                                            console.log(xhr.responseText);
+
+                                        var data = [];
+
+
+                                        var labels = [];
+
+
+                                        const ctx = document.getElementById('chartHours').getContext('2d');
+
+                                        result = xhr.responseText[0];
+
+                                        if (result) {
+
+                                for (var i = 0; i < result.length; i++) {
+                                    if (result[i]) {
+
+
+
+                                            data[i] = result[i].noofaccidents;
+
+                                        labels[i] = result[i].year;
+                                    }
+                                    // red = Math.floor((Math.random() * 255) + 1);
+                                    // green = Math.floor((Math.random() * 255) + 1);
+                                    // blue = Math.floor((Math.random() * 255) + 1);
+
+
+                                    // backgroundColor[i] = 'rgba(' + red + ',' + green + ','
+                                    //     + blue + ', 0.2)';
+                                    // borderColor[i] = 'rgba(' + red + ',' + green + ',' + blue
+                                    //     + ', 0.2)';
+                                }
+                            }
+                                        const myChart = new Chart(ctx, {
+                                            type: 'line',
+                                        data: {
+                                            labels: labels,
+                                        datasets: [{
+                                            label: 'Number of accidents',
+                                        data: data,
+
+                                        borderColor: "#3e95cd",
+                                        fill: false
+                                    }
+
+                                        ]
+                                },
+                                        options: {
+                                            scales: {
+                                            y: {
+                                            beginAtZero: true
+                                        }
+                                    }
+                                }
+                            });
+
+                        }
+                    });
+                                        */
+
+
+                });
+        });
+                                </script>
+
+                                <div class="container-fluid">
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <div id="map"></div>
+                                            <div id="coordinate"></div>
+                                            
+
+                                            <!-- <div><canvas id="chartHours"></canvas></div> -->
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="row">
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+
+                        <div class="col">
+                            <div class="card">
+                                <div class="header">
+                                    <ul class="nav navbar-nav navbar-left">
+                                        <h4 class="title">Accident Trend Analysis based on Location:</h4>
+                                    </ul>
+                                    
+                                </div>
+
+
+                                <div class="content">
+                                    <canvas id="chartHours"></canvas>
+
+
+                                    <div class="footer">
+
+                                        <hr>
+                                        <div class="stats">
+                                            <b>
+                                                The user inputs the pin location and gives the range of years for which we need the accident data to identify the accident-prone areas.
+                                                Initially to plot a dot graph we filter the data based on year and location.
+                                                We also provide a radius to query all the accidents that happened in and around that zip code of the area.
+                                                The geological graph will have denser circles around areas where the count of accidents are high calculated from the accident table based on the attribute accident number and year is derived by using the system date and the date of the accident.
+                                            </b>
+
+                                        </div>
+                                        <a class="btn btn btn-primary btn-lg" href="lawenforcement.html" role="button">Time of the day</a>
+                                        <a class="btn btn btn-primary btn-lg" href="lawenforcementquery3.html"
+                                           role="button">Cause of Accident</a>
+                                        <a class="btn btn btn-primary btn-lg" class="active" href="#"
+                                           role="button">Location</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+                </div>
+            </div>
+
+
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js"></script>
+
+    <!--   Core JS Files   -->
+    <script src="assets/js/jquery.3.2.1.min.js" type="text/javascript"></script>
+	<script src="assets/js/bootstrap.min.js" type="text/javascript"></script>
+
+	<!--  Charts Plugin -->
+	<script src="assets/js/chartist.min.js"></script>
+    
+
+    <!--  Notifications Plugin    -->
+    <script src="assets/js/bootstrap-notify.js"></script>
+
+    <!--  Google Maps Plugin    -->
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
+
+    <!-- Light Bootstrap Table Core javascript and methods for Demo purpose -->
+	<script src="assets/js/light-bootstrap-dashboard.js?v=1.4.0"></script>
+
+	<!-- Light Bootstrap Table DEMO methods, don't include it in your project! -->
+	<script src="assets/js/demo.js"></script>
+
+	<script type="text/javascript">
+    	$(document).ready(function(){
+
+        	demo.initChartist();
+
+        	$.notify({
+            	icon: 'pe-7s-info',
+            	message: "Welcome to <b>Road Safety Analysis System.</b>"
+
+            },{
+                type: 'info',
+                timer: 4000
+            });
+    	});
+	</script>
+    <script>
+
+        $(document).ready(function () {
+
+            var options = {
+                center: [39.10418, -77.62987],
+                zoom: 10
+            }
+
+            var map = L.map('map', options);
+
+            L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', { attribution: 'OSM' })
+                .addTo(map);
+
+            // map.on('click',
+            // 	function(e){
+            // 		//var coord = e.latlng.toString().split(',');
+            // 		//var lat = coord[0].split('(');
+            // 		//var lng = coord[1].split(')');
+            // 		//alert("You clicked the map at LAT: " + lat[1] + " and LONG: " + lng[0]);
+            // 		L.marker(e.latlng).addTo(map);
+            // 	});
+
+            var myMarker = L.marker([39.10418, -77.6287], { title: "MyPoint", alt: "The Big I", draggable: true })
+                .addTo(map)
+                .on('dragend', function () {
+                    var coord = String(myMarker.getLatLng()).split(',');
+                    console.log(coord);
+                    $('#coordinate').html("<h2>Coordinate:" + coord + "</h2>");
+                    var lat = coord[0].split('(');
+                    console.log(lat);
+                    var lng = coord[1].split(')');
+                    console.log(lng);
+                    myMarker.bindPopup("Moved to: " + lat[1] + ", " + lng[0] + ".");
+
+                    var position = {};
+
+                    position.lon = lng[0];
+                    position.lat = lat[1];
+                    position.kms = 50;
+                    /*
+                    $.ajax({
+                        type: 'POST',
+                        url: 'WebService1.asmx/Querypart',
+                        contentType: 'application/json; charset=utf-8',
+                        data: JSON.stringify({ 'lon': lon, 'lat': lat, 'kms': kms }),
+                        dataType: 'json',
+                        success: AjaxSucceeded,
+                        error: AjaxFailed
+                    });
+                    */
+
+                    $.ajax({
+                        url: "WebService1.asmx/Querypart",
+                        method: "post",
+                        dataType: "json",
+                        data: "{cmp: " + JSON.stringify(position) + "}",
+                        contentType: "application/json; charset=utf-8",
+
+
+                        success: function (result) {
+
+                            console.log(success);
+
+
+                        },
+                        error: function (xhr, err) {
+                            console.log(xhr.responseText);
+
+                            var data = [];
+
+
+                            var labels = [];
+
+
+                            const ctx = document.getElementById('chartHours').getContext('2d');
+
+                            result = xhr.responseText[0];
+
+                            if (result) {
+
+                                for (var i = 0; i < result.length; i++) {
+                                    if (result[i]) {
+
+
+
+                                        data[i] = result[i].noofaccidents;
+
+                                        labels[i] = result[i].year;
+                                    }
+                                    // red = Math.floor((Math.random() * 255) + 1);
+                                    // green = Math.floor((Math.random() * 255) + 1);
+                                    // blue = Math.floor((Math.random() * 255) + 1);
+
+
+                                    // backgroundColor[i] = 'rgba(' + red + ',' + green + ','
+                                    //     + blue + ', 0.2)';
+                                    // borderColor[i] = 'rgba(' + red + ',' + green + ',' + blue
+                                    //     + ', 0.2)';
+                                }
+                            }
+                            const myChart = new Chart(ctx, {
+                                type: 'line',
+                                data: {
+                                    labels: labels,
+                                    datasets: [{
+                                        label: 'Number of accidents',
+                                        data: data,
+
+                                        borderColor: "#3e95cd",
+                                        fill: false
+                                    }
+
+                                    ]
+                                },
+                                options: {
+                                    scales: {
+                                        y: {
+                                            beginAtZero: true
+                                        }
+                                    }
+                                }
+                            });
+
+                        }
+                    });
+
+
+
+                });
+        });
+
+    </script>
+
+</html>
